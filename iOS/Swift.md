@@ -304,7 +304,7 @@
 
 * 闭包在函数式编程(functional)的应用`filter`, `map` `reduce`等等, 并且可以通过函数式编程实现懒容器(Lazy collections)
 
-##### Strings ???? 
+##### Strings (待总结...)
 
 
 
@@ -402,3 +402,66 @@
 
 * **懒属性 (lazy stored property)**`lazy`关键字, 声明属性`lazy ` . `lazy var 变量名 = { 计算的值 }()` 跟计算属性不同, 他是在一开始初始化的时候不加载, 等什么时候使用的时候才会加载. 就是**懒加载**. **只加载一次.** 通常需要重写init构造函数, 不要初始化这个变量 *PS: 注意, 懒加载要一定用`var`声明, 原因: 懒属性天生就是变量, 一开始初始化时候没有加载, 但是用到它的时候才加载. 尽管只加载一次, 但也是用var声明*
 
+##### Methods
+
+* 初始化方法,  **结构体**不写构造方法`init()`, 但给每个变量附了初试值的, 系统会自动生成对应的带参数的构造方法(compiler's member-wise initializer). 类则不行. 所以可以通过**扩展初始化方法**, 可以让保留这种compiler's member-wise initializer
+
+*  **mutating关键字**: 结构体方法**中需要改变成员变量需要添加声明`mutating`. `mutating func advance() { day += 1 }`. **类可以不加mutating, 但是结构体必须加, 因为结构体默认是immutable的, 相当于把操作后的新值赋值给了该成员, 所以mutating方法是不能应用在修改`let`修饰的成员变量. 因为`let`修饰的成员属性不可变, 只能在`var`修饰的成员属性改动
+
+* **Type methods**, 即其他语言中的类方法很像, 这个方法是属于这个结构体或者是类的. 要在方法名前面加**static**关键字修饰. 使用方式`结构体名.方法`
+
+* 结构体中, 可以通过`extension`关键字, 再已有的结构体上进行扩展. **但不可以增加存储属性(store properties)**, 因为这会改变结构体的内存和大小分布. 可以在结构体扩展中实现其`init方法`.  (类可以扩展属性, 结构体不可以)
+
+  ```swift
+  let months = ["January", "February", "March",
+                "April", "May", "June",
+                "July", "August", "September",
+                "October", "November", "December"]
+  
+  struct SimpleDate {
+    var month = "January"
+    var day = 1
+    
+    func monthsUntilWinterBreak() -> Int {
+      months.firstIndex(of: "December")! - months.firstIndex(of: month)!
+    }
+    
+    mutating func advance() {   // 结构体中修改了成员属性是需要增加mutating关键字的
+      day += 1
+    }
+  }
+  
+  // 通过扩展初始化方法, 可以让保留这种compiler's member-wise initializer
+  extension SimpleDate {
+    init(month: Int, day: Int) {
+      self.month = months[month-1]
+      self.day = day
+    }
+  }
+  
+  // 赋值给结构体属性初值, 编译器可以推断, 给名字初始化即可. 
+  let date = SimpleDate()  // 默认是 "January"   1
+  let date2 = SimpleDate(day: 14)   // "January"   day : 14
+  
+  // extension init(month:day:)方法功劳
+  let valentinesDay = SimpleDate(month: "February", day: 14)
+  ```
+
+* `self `用法跟c++和Java的`this`概念相同. 而Objc中`self`是调用property的getter和setter方法. 
+
+* 方法(Methods)能够存在在任何named type中, named type包括: 结构体(structures), 类(class), 枚举(enumerations)
+
+##### Classes
+
+* 类是**引用变量(reference type)**, 跟结构体(value type)不同. 每个实例对象(instance)被初始化在堆(heap)中, 而引用变量在栈(stack)中, 指向堆中的实例. 一个实例可以被多个引用变量指向. (Share on assignment)
+* Swift中`==`**双等号**是比较两个类中的**值是否相等**(类似java的.equal方法);    判断两个引用变量**是否指向同一个实例对象**需要使用`===`**三等号** (判断两个references的实例内存地址是否相同)
+* 类中修改成员变量的方法**不需要**在方法名前增加`mutating`关键字
+* 用let修饰的引用变量(reference type), 说明该引用变量的地址不能再变化了, 即不能再指向其他的变量. 但是所指的实例对象的内部可变的值是可以变化的. (跟java的final, 和c++的const修饰的指针很像,只是指针不能指了,实例对象是可以改变的 )
+* 注意类中的状态state和副作用side effects,  有传入参数的时候假如有side effects需要注释, 提醒调用者. (类中属性被改变了等等)
+* **class vs struct**: 1. 结构体(**生命周期短, 栈, 速度快, copy**): range, Location;     2. 类(**生命周期长, 堆, 速度慢, references**): 时间线, Student.    3 .快速选择方法:  如果数据从来不变或者只是一些简单的数据用**structure**, 若需要更新数据而且需要包含一些逻辑去更新数据状态的使用**class**
+* 使用扩展`extension`可以扩展类的属性, 结构体只能扩展方法
+
+##### Advanced Classes (继承, 多态)
+
+* **继承inherit**, is-a的关系,   `class 子类: 父类 `后面跟冒号(colon). 子类 is a 父类
+* **多态(Polymorphism)**, 
