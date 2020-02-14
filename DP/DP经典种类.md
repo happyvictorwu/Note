@@ -41,11 +41,13 @@ int solve() {
 
 
 
-## 线性DP
+## 线性DP （序列型）
 
 * 递推方程有一个明显的线性关系, 背包问题也是线性DP的一种
 * 线性DP的状态可以想象成一个n维矩阵, 一行一行按着顺序求出结果, 这种DP问题叫做线性DP
 * 常见问题: 背包问题, 数字三角形(lc120), 最长上升子序列(lc300), 最长公共子序列(lc1143), 编辑距离(lc72)
+
+[优秀博客]( https://wnjxyk.keji.moe/algorithm/algorithm-abc/sequence-dp/)
 
 ## 区间DP
 
