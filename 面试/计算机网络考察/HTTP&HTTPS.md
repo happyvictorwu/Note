@@ -124,6 +124,20 @@ HTTP的持久连接：只要经历一次TCP连接和销毁（多个http请求可
 
 Cookie / Session可以对其无状态的特性做出补偿，让其逻辑变成有状态
 
+<img src="image-20200215233026840.png" alt="image-20200215233026840" style="zoom:25%;" />
+
+* Cookie： 主要用来记录用户状态，区分用户；**状态保存在客户端**
+
+  * 在http set Cookie这个字段中
+  * 修改Cookie： 新值覆盖旧值（但是字段需要一样）， 或者设置一个过期时间让Cookie过期
+  * 保证Cookie安全：1. 加密。 2.只在https上携带Cookie。3.设置httpOnly，防止跨站脚本攻击
+
+* Session：用来记录用户状态，区分用户；**状态存放在服务器端**
+
+  * 工作流程：在Server生成记录用户状态的SessionId发给Client，Server发送请求时带上SessionId让Server识别是哪个用户
+
+    <img src="image-20200215233438718.png" alt="image-20200215233438718" style="zoom:20%;" />
+
 
 
 ## HTTPS
@@ -178,3 +192,4 @@ SSL / TLS 在**传输层之上，应用层之下**
 加密解密用同一把钥匙。
 
 缺点：秘钥在网络中进行传递，有可能遭遇中间人攻击（对秘钥进行劫持），安全较非对称弱
+
