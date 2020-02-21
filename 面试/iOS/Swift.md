@@ -1,4 +1,4 @@
-* # Swift Apprentice
+# Swift Apprentice
 
   *Until Swift 5.0*
 
