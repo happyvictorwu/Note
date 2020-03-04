@@ -1,19 +1,19 @@
 # STL & C++刷题技巧
 
-|        容器        |    头文件     |                             方法                             |                             备注                             |
-| :----------------: | :-----------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
-|     **vector**     |    vector     | `push_back/pop_back` `resize` `erase` `front/back` `begin/ end` `size/clear/empty` `[]` |                   resize的参数跟初始化一样                   |
-|      **list**      |     list      | `push_back/pop_back` `front/back` `erase` `begin/ end` `size/clear/empty` `[]` |                                                              |
-|     **string**     |    string     | `substr` `+=/push_back` `find` `c_str` `replace` `size/length/clear/empty` `[]` | getline(cin,s6); 读取字符到遇到换行，空格可读入，知道‘\n’结束. `c_str()`可以用printf %s输出 `to_string() / stoi()/stod()`在这个头文件中。  char转成字符串 `string(1, c)` |
-|     **stack**      |     stack     |               `push` `pop` `top` `size/empty`                |                **没有**`clear`， 要一个个弹出                |
-|     **queue**      |     queue     |         `push` `pop` `top` `front/back` `size/empty`         |                **没有**`clear`， 要一个个弹出                |
-| **priority_queue** |     queue     |                   `push/pop` `size/empty`                    | 默认大根堆 小根堆`priority_queue<int, vector<int>, greater<int> > q;` 小于的定义是反的 |
-|     **deque**      |     deque     | `push_back/pop_back` `front/back` `begin/ end` `size/clear/empty` `[]` | deque容器虽然支持随机访问，但是其**随机访问**速度慢于vector容器。插(删)头尾O(1) |
-|      **set**       |      set      | `insert` `count / find` `erase` `begin/ end` `size/clear/empty` | 自动去重升序排序 `O(logn)` `构造函数vector->set(v.begin(), v.end())` |
-| **unordered_set**  | unordered_set | `insert` `count / find` `erase` `begin/ end` `size/clear/empty` |                            `O(1)`                            |
-|      **map**       |      map      | `insert` `count / find` `[]` `erase` `begin/ end` `size/clear/empty` | 基于平衡树`O(logn)` 、可以使用初始化列表`{{k,v}, {k,v}...}`  |
-| **unordered_map**  | unordered_map | `insert` `count / find` `erase` `begin/ end` `size/clear/empty` |   基于哈希表`O(1)` 、可以使用初始化列表`{{k,v}, {k,v}...}`   |
-|      **其他**      |               |        `max_element` `lower_bound` `next_permutation`        | `不要用`.size()`不要拿它做减法，返回的是unsigned int无符号整数做减法不会小于0` `resize()只能边长度，里面的元素可能不会变` |
+| 容器 | 头文件 | 方法 | 备注 |
+| :-: | :-: | :-: | :-: |
+| **vector** | vector | `push_back/pop_back` `resize` `erase` `front/back` `begin/ end` `size/clear/empty` `[]`| resize的参数跟初始化一样 |
+| **list** | list | `push_back/pop_back` `front/back` `erase` `begin/ end` `size/clear/empty` `[]`| |
+| **string** | string | `substr` `+=/push_back` `find` `c_str` `replace` `size/length/clear/empty` `[]` | getline(cin,s6); 读取字符到遇到换行，空格可读入，知道‘\n’结束. `c_str()`可以用printf %s输出 `to_string() / stoi()/stod()`在这个头文件中。  char转成字符串 `string(1, c)`|
+| **stack** | stack | `push` `pop` `top` `size/empty`| **没有**`clear`， 要一个个弹出 |
+| **queue** | queue | `push` `pop` `top` `front/back` `size/empty`| **没有**`clear`， 要一个个弹出 |
+| **priority_queue** | queue | `push/pop` `size/empty`| 默认大根堆 小根堆`priority_queue<int, vector<int>, greater<int> > q;` 小于的定义是反的|
+| **deque** | deque | `push_back/pop_back` `front/back` `begin/ end` `size/clear/empty` `[]`| deque容器虽然支持随机访问，但是其**随机访问**速度慢于vector容器。插(删)头尾O(1) |
+| **set** | set | `insert` `count / find` `erase` `begin/ end` `size/clear/empty`| 自动去重升序排序 `O(logn)` `构造函数vector->set(v.begin(), v.end())` |
+| **unordered_set** | unordered_set | `insert` `count / find` `erase` `begin/ end` `size/clear/empty`| `O(1)` |
+| **map** | map | `insert` `count / find` `[]` `erase` `begin/ end` `size/clear/empty` | 基于平衡树`O(logn)` 可以使用初始化列表|
+| **unordered_map** | unordered_map | `insert` `count / find` `erase` `size/clear/empty`| 基于哈希表`O(1)` |
+| **其他** | | `max_element` `lower_bound` `next_permutation` |  ！！！ 用`.size()`不要拿它做减法，返回的是`unsigned int`无符号整数做减法不会小于0 |
 
 
 # 常用
@@ -243,3 +243,15 @@ vector<pair<int, int>> a2(mp.begin(), mp.end());  // map -> vector
 
 unordered_set<char> se(word.begin(), word.end()); //word 为 string
 ```
+
+
+
+## 容器元素为pair的时候不要使用引用
+
+```c++
+deque<pair<int, int>> q;
+
+// auto& t = q.front();   // 不要添加引用, 会出现意想不到的错误
+auto t = q.front();
+```
+
